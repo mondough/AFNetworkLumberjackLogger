@@ -26,6 +26,18 @@
 
 #import <objc/runtime.h>
 
+#import "DDLog.h"
+
+#ifdef RELEASE
+static const NSUInteger ddLogLevel = LOG_LEVEL_OFF;
+#else
+static const NSUInteger ddLogLevel = LOG_FLAG_DEBUG;
+#endif
+
+#define LOG DDLogDebug
+
+
+
 static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
     NSURLRequest *request = nil;
     if ([[notification object] isKindOfClass:[AFURLConnectionOperation class]]) {
@@ -100,10 +112,10 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
     
     switch (self.level) {
         case AFLoggerLevelDebug:
-            NSLog(@"%@ '%@': %@ %@", [request HTTPMethod], [[request URL] absoluteString], [request allHTTPHeaderFields], [self.class bodyToPrintForRequest:request]);
+            LOG(@"%@ '%@': %@ %@", [request HTTPMethod], [[request URL] absoluteString], [request allHTTPHeaderFields], [self.class bodyToPrintForRequest:request]);
             break;
         case AFLoggerLevelInfo:
-            NSLog(@"%@ '%@'", [request HTTPMethod], [[request URL] absoluteString]);
+            LOG(@"%@ '%@'", [request HTTPMethod], [[request URL] absoluteString]);
             break;
         default:
             break;
@@ -140,17 +152,17 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
             case AFLoggerLevelInfo:
             case AFLoggerLevelWarn:
             case AFLoggerLevelError:
-                NSLog(@"[Error] %@ '%@' (%ld) [%.04f s]: %@", [request HTTPMethod], [[response URL] absoluteString], (long)responseStatusCode, elapsedTime, error);
+                LOG(@"[Error] %@ '%@' (%ld) [%.04f s]: %@", [request HTTPMethod], [[response URL] absoluteString], (long)responseStatusCode, elapsedTime, error);
             default:
                 break;
         }
     } else {
         switch (self.level) {
             case AFLoggerLevelDebug:
-                NSLog(@"%ld '%@' [%.04f s]: %@ %@", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime, responseHeaderFields, objectToPrint);
+                LOG(@"%ld '%@' [%.04f s]: %@ %@", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime, responseHeaderFields, objectToPrint);
                 break;
             case AFLoggerLevelInfo:
-                NSLog(@"%ld '%@' [%.04f s]", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime);
+                LOG(@"%ld '%@' [%.04f s]", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime);
                 break;
             default:
                 break;
@@ -176,7 +188,7 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
         // Decode URL-encoded query pairs
         for (NSString *queryStringPair in queryStringPairs) {
             NSArray *components = [queryStringPair componentsSeparatedByString:@"="];
-            NSLog(@"%@", components);
+            LOG(@"%@", components);
             
             if (components.count>1) {
                 id value = [[components[1]
