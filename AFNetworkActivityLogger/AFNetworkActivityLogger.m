@@ -160,15 +160,8 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
         responseHeaderFields = [(NSHTTPURLResponse *)response allHeaderFields];
     }
     
-//     Try to get the operation's response object first. If it's nil, get the response string.
-//    id objectToPrint = [self.class objectToPrintForNotification:notification];
-
-    id responseObject = nil;
-    if ([[notification object] respondsToSelector:@selector(responseString)]) {
-        responseObject = [[notification object] responseString];
-    } else if (notification.userInfo) {
-        responseObject = notification.userInfo[AFNetworkingTaskDidCompleteSerializedResponseKey];
-    }
+    // Try to get the operation's response object first. If it's nil, get the response string.
+    id objectToPrint = [self.class objectToPrintForNotification:notification];
 
     NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:objc_getAssociatedObject(notification.object, AFNetworkRequestStartDate)];
 
@@ -185,8 +178,7 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
     } else {
         switch (self.level) {
             case AFLoggerLevelDebug:
-//                LOG(@"%ld '%@' [%.04f s]: %@ %@", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime, responseHeaderFields, objectToPrint);
-                NSLog(@"%ld '%@' [%.04f s]: %@ %@", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime, responseHeaderFields, responseObject);
+                LOG(@"%ld '%@' [%.04f s]: %@ %@", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime, responseHeaderFields, objectToPrint);
                 break;
             case AFLoggerLevelInfo:
                 LOG(@"%ld '%@' [%.04f s]", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime);
