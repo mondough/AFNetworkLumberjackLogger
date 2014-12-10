@@ -29,12 +29,16 @@
 #import "DDLog.h"
 
 #ifdef RELEASE
-static const NSUInteger ddLogLevel = LOG_LEVEL_OFF;
+static NSUInteger ddLogLevel = LOG_LEVEL_OFF;
 #else
-static const NSUInteger ddLogLevel = LOG_FLAG_DEBUG;
+static NSUInteger ddLogLevel = LOG_FLAG_DEBUG;
 #endif
 
-#define LOG DDLogDebug
+//#define DDLogError(frmt, ...)   LOG_OBJC_MAYBE(LOG_ASYNC_ERROR,   LOG_LEVEL_DEF, LOG_FLAG_ERROR,   0, frmt, ##__VA_ARGS__)
+//#define DDLogWarn(frmt, ...)    LOG_OBJC_MAYBE(LOG_ASYNC_WARN,    LOG_LEVEL_DEF, LOG_FLAG_WARN,    0, frmt, ##__VA_ARGS__)
+//#define DDLogInfo(frmt, ...)    LOG_OBJC_MAYBE(LOG_ASYNC_INFO,    LOG_LEVEL_DEF, LOG_FLAG_INFO,    0, frmt, ##__VA_ARGS__)
+//#define DDLogDebug(frmt, ...)   LOG_OBJC_MAYBE(LOG_ASYNC_DEBUG,   LOG_LEVEL_DEF, LOG_FLAG_DEBUG,   0, frmt, ##__VA_ARGS__)
+//#define DDLogVerbose(frmt, ...) LOG_OBJC_MAYBE(LOG_ASYNC_VERBOSE, LOG_LEVEL_DEF, LOG_FLAG_VERBOSE, 0, frmt, ##__VA_ARGS__)
 
 
 
@@ -130,10 +134,10 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
     
     switch (self.level) {
         case AFLoggerLevelDebug:
-            LOG(@"%@ '%@': %@ %@", [request HTTPMethod], [[request URL] absoluteString], [request allHTTPHeaderFields], [self.class bodyToPrintForRequest:request]);
+            DDLogDebug(@"%@ '%@': %@ %@", [request HTTPMethod], [[request URL] absoluteString], [request allHTTPHeaderFields], [self.class bodyToPrintForRequest:request]);
             break;
         case AFLoggerLevelInfo:
-            LOG(@"%@ '%@'", [request HTTPMethod], [[request URL] absoluteString]);
+            DDLogInfo(@"%@ '%@'", [request HTTPMethod], [[request URL] absoluteString]);
             break;
         default:
             break;
@@ -171,17 +175,17 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
             case AFLoggerLevelInfo:
             case AFLoggerLevelWarn:
             case AFLoggerLevelError:
-                LOG(@"[Error] %@ '%@' (%ld) [%.04f s]: %@", [request HTTPMethod], [[response URL] absoluteString], (long)responseStatusCode, elapsedTime, error);
+                DDLogError(@"[Error] %@ '%@' (%ld) [%.04f s]: %@", [request HTTPMethod], [[response URL] absoluteString], (long)responseStatusCode, elapsedTime, error);
             default:
                 break;
         }
     } else {
         switch (self.level) {
             case AFLoggerLevelDebug:
-                LOG(@"%ld '%@' [%.04f s]: %@ %@", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime, responseHeaderFields, objectToPrint);
+                DDLogDebug(@"%ld '%@' [%.04f s]: %@ %@", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime, responseHeaderFields, objectToPrint);
                 break;
             case AFLoggerLevelInfo:
-                LOG(@"%ld '%@' [%.04f s]", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime);
+                DDLogInfo(@"%ld '%@' [%.04f s]", (long)responseStatusCode, [[response URL] absoluteString], elapsedTime);
                 break;
             default:
                 break;
@@ -207,7 +211,6 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
         // Decode URL-encoded query pairs
         for (NSString *queryStringPair in queryStringPairs) {
             NSArray *components = [queryStringPair componentsSeparatedByString:@"="];
-            LOG(@"%@", components);
             
             if (components.count>1) {
                 id value = [[components[1]
