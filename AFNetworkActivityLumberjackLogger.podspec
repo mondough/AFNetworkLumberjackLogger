@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.summary  = 'AFNetworking 2.0 Extension for Network Request Logging with Cocoa Lumberjack'
   s.homepage = 'https://github.com/RomainBoulay/AFNetworkActivityLumberjackLogger'
   s.authors  = { 'Romain Boulay' => 'romain.boulay@gmail.com' }
-  s.source   = { :git => 'git@github.com:RomainBoulay/AFNetworkActivityLumberjackLogger.git', :tag => "pod" + s.version.to_s }
+  s.source   = { :git => 'https://github.com/RomainBoulay/AFNetworkActivityLumberjackLogger.git', :tag => "lumberjack-" + s.version.to_s }
   s.source_files = 'AFNetworkActivityLumberjackLogger'
   s.requires_arc = true
   s.ios.deployment_target = '6.0'
