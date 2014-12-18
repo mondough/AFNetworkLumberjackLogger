@@ -1,4 +1,4 @@
-// AFNetworkActivityLogger.h
+// AFNetworkActivityLumberjackLogger.h
 //
 // Copyright (c) 2013 AFNetworking (http://afnetworking.com/)
 //
@@ -20,12 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "AFNetworkActivityLogger.h"
+#import "AFNetworkActivityLumberjackLogger.h"
 #import "AFURLConnectionOperation.h"
 #import "AFURLSessionManager.h"
 
 #import <objc/runtime.h>
-
 #import "DDLog.h"
 
 #ifdef RELEASE
@@ -46,6 +45,7 @@ static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notificat
     return request;
 }
 
+
 static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
     NSError *error = nil;
     if ([[notification object] isKindOfClass:[AFURLConnectionOperation class]]) {
@@ -64,10 +64,12 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
     return error;
 }
 
-@implementation AFNetworkActivityLogger
+
+@implementation AFNetworkActivityLumberjackLogger
+
 
 + (instancetype)sharedLogger {
-    static AFNetworkActivityLogger *_sharedLogger = nil;
+    static AFNetworkActivityLumberjackLogger *_sharedLogger = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -76,6 +78,7 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
     
     return _sharedLogger;
 }
+
 
 - (id)init {
     self = [super init];
@@ -88,9 +91,11 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
     return self;
 }
 
+
 - (void)dealloc {
     [self stopLogging];
 }
+
 
 - (void)startLogging {
     [self stopLogging];
@@ -104,12 +109,13 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
 #endif
 }
 
+
 - (void)stopLogging {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - NSNotification
 
+#pragma mark - NSNotification
 static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
 
 - (void)networkRequestDidStart:(NSNotification *)notification {
@@ -136,6 +142,7 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
             break;
     }
 }
+
 
 - (void)networkRequestDidFinish:(NSNotification *)notification {
     NSURLRequest *request = AFNetworkRequestFromNotification(notification);
@@ -186,8 +193,8 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
     }
 }
 
-#pragma mark - Object to print
 
+#pragma mark - Object to print
 + (id)bodyToPrintForRequest:(NSURLRequest *)request {
     id body = nil;
     

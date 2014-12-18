@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:AFNetworkActivityLogger.podspec">
+      location = "group:AFNetworkActivityLumberjackLogger.podspec">
    </FileRef>
    <FileRef
       location = "group:LICENSE">
@@ -12,12 +12,12 @@
    </FileRef>
    <Group
       location = "group:AFNetworkActivityLogger"
-      name = "AFNetworkActivityLogger">
+      name = "AFNetworkActivityLumberjackLogger">
       <FileRef
-         location = "group:AFNetworkActivityLogger.h">
+         location = "group:AFNetworkActivityLumberjackLogger.h">
       </FileRef>
       <FileRef
-         location = "group:AFNetworkActivityLogger.m">
+         location = "group:AFNetworkActivityLumberjackLogger.m">
       </FileRef>
    </Group>
 </Workspace>

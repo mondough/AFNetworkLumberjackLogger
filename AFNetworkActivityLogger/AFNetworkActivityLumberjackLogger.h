@@ -1,4 +1,4 @@
-// AFNetworkActivityLogger.h
+// AFNetworkActivityLumberjackLogger.h
 //
 // Copyright (c) 2013 AFNetworking (http://afnetworking.com/)
 //
@@ -32,15 +32,15 @@ typedef NS_ENUM(NSUInteger, AFHTTPRequestLoggerLevel) {
 };
 
 /**
- `AFNetworkActivityLogger` logs requests and responses made by AFNetworking, with an adjustable level of detail.
+ `AFNetworkActivityLumberjackLogger` logs requests and responses made by AFNetworking, with an adjustable level of detail.
  
- Applications should enable the shared instance of `AFNetworkActivityLogger` in `AppDelegate -application:didFinishLaunchingWithOptions:`:
+ Applications should enable the shared instance of `AFNetworkActivityLumberjackLogger` in `AppDelegate -application:didFinishLaunchingWithOptions:`:
 
-        [[AFNetworkActivityLogger sharedLogger] startLogging];
+        [[AFNetworkActivityLumberjackLogger sharedLogger] startLogging];
  
- `AFNetworkActivityLogger` listens for `AFNetworkingOperationDidStartNotification` and `AFNetworkingOperationDidFinishNotification` notifications, which are posted by AFNetworking as request operations are started and finish. For further customization of logging output, users are encouraged to implement desired functionality by listening for these notifications.
+ `AFNetworkActivityLumberjackLogger` listens for `AFNetworkingOperationDidStartNotification` and `AFNetworkingOperationDidFinishNotification` notifications, which are posted by AFNetworking as request operations are started and finish. For further customization of logging output, users are encouraged to implement desired functionality by listening for these notifications.
  */
-@interface AFNetworkActivityLogger : NSObject
+@interface AFNetworkActivityLumberjackLogger : NSObject
 
 /**
  The level of logging detail. See "Logging Levels" for possible values. `AFLoggerLevelInfo` by default.
@@ -78,7 +78,7 @@ typedef NS_ENUM(NSUInteger, AFHTTPRequestLoggerLevel) {
 /**
  ## Logging Levels
 
- The following constants specify the available logging levels for `AFNetworkActivityLogger`:
+ The following constants specify the available logging levels for `AFNetworkActivityLumberjackLogger`:
 
  enum {
  AFLoggerLevelOff,
