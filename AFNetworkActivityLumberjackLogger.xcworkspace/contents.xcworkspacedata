@@ -11,7 +11,7 @@
       location = "group:README.md">
    </FileRef>
    <Group
-      location = "group:AFNetworkActivityLogger"
+      location = "group:AFNetworkActivityLumberjackLogger"
       name = "AFNetworkActivityLumberjackLogger">
       <FileRef
          location = "group:AFNetworkActivityLumberjackLogger.h">
