@@ -29,17 +29,10 @@
 #import "DDLog.h"
 
 #ifdef RELEASE
-static NSUInteger ddLogLevel = LOG_LEVEL_OFF;
+static int ddLogLevel = LOG_LEVEL_OFF;
 #else
-static NSUInteger ddLogLevel = LOG_FLAG_DEBUG;
+static int ddLogLevel = LOG_FLAG_DEBUG;
 #endif
-
-//#define DDLogError(frmt, ...)   LOG_OBJC_MAYBE(LOG_ASYNC_ERROR,   LOG_LEVEL_DEF, LOG_FLAG_ERROR,   0, frmt, ##__VA_ARGS__)
-//#define DDLogWarn(frmt, ...)    LOG_OBJC_MAYBE(LOG_ASYNC_WARN,    LOG_LEVEL_DEF, LOG_FLAG_WARN,    0, frmt, ##__VA_ARGS__)
-//#define DDLogInfo(frmt, ...)    LOG_OBJC_MAYBE(LOG_ASYNC_INFO,    LOG_LEVEL_DEF, LOG_FLAG_INFO,    0, frmt, ##__VA_ARGS__)
-//#define DDLogDebug(frmt, ...)   LOG_OBJC_MAYBE(LOG_ASYNC_DEBUG,   LOG_LEVEL_DEF, LOG_FLAG_DEBUG,   0, frmt, ##__VA_ARGS__)
-//#define DDLogVerbose(frmt, ...) LOG_OBJC_MAYBE(LOG_ASYNC_VERBOSE, LOG_LEVEL_DEF, LOG_FLAG_VERBOSE, 0, frmt, ##__VA_ARGS__)
-
 
 
 static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
@@ -49,7 +42,7 @@ static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notificat
     } else if ([[notification object] respondsToSelector:@selector(originalRequest)]) {
         request = [[notification object] originalRequest];
     }
-
+    
     return request;
 }
 
@@ -75,12 +68,12 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
 
 + (instancetype)sharedLogger {
     static AFNetworkActivityLogger *_sharedLogger = nil;
-
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedLogger = [[self alloc] init];
     });
-
+    
     return _sharedLogger;
 }
 
@@ -89,9 +82,9 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
     if (!self) {
         return nil;
     }
-
+    
     self.level = AFLoggerLevelInfo;
-
+    
     return self;
 }
 
@@ -101,10 +94,10 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
 
 - (void)startLogging {
     [self stopLogging];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingOperationDidStartNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidFinish:) name:AFNetworkingOperationDidFinishNotification object:nil];
-
+    
 #if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000) || (defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 1090)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidStart:) name:AFNetworkingTaskDidResumeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkRequestDidFinish:) name:AFNetworkingTaskDidCompleteNotification object:nil];
@@ -121,15 +114,15 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
 
 - (void)networkRequestDidStart:(NSNotification *)notification {
     NSURLRequest *request = AFNetworkRequestFromNotification(notification);
-
+    
     if (!request) {
         return;
     }
-
+    
     if (request && self.filterPredicate && [self.filterPredicate evaluateWithObject:request]) {
         return;
     }
-
+    
     objc_setAssociatedObject(notification.object, AFNetworkRequestStartDate, [NSDate date], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     switch (self.level) {
@@ -148,15 +141,15 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
     NSURLRequest *request = AFNetworkRequestFromNotification(notification);
     NSURLResponse *response = [notification.object response];
     NSError *error = AFNetworkErrorFromNotification(notification);
-
+    
     if (!request && !response) {
         return;
     }
-
+    
     if (request && self.filterPredicate && [self.filterPredicate evaluateWithObject:request]) {
         return;
     }
-
+    
     NSUInteger responseStatusCode = 0;
     NSDictionary *responseHeaderFields = nil;
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -166,9 +159,9 @@ static void * AFNetworkRequestStartDate = &AFNetworkRequestStartDate;
     
     // Try to get the operation's response object first. If it's nil, get the response string.
     id objectToPrint = [self.class objectToPrintForNotification:notification];
-
+    
     NSTimeInterval elapsedTime = [[NSDate date] timeIntervalSinceDate:objc_getAssociatedObject(notification.object, AFNetworkRequestStartDate)];
-
+    
     if (error) {
         switch (self.level) {
             case AFLoggerLevelDebug:
