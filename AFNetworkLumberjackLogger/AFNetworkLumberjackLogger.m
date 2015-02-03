@@ -1,4 +1,4 @@
-// AFNetworkActivityLumberjackLogger.h
+// AFNetworkLumberjackLogger.h
 //
 // Copyright (c) 2013 AFNetworking (http://afnetworking.com/)
 //
@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "AFNetworkActivityLumberjackLogger.h"
+#import "AFNetworkLumberjackLogger.h"
 #import "AFURLConnectionOperation.h"
 #import "AFURLSessionManager.h"
 
@@ -65,11 +65,11 @@ static NSError * AFNetworkErrorFromNotification(NSNotification *notification) {
 }
 
 
-@implementation AFNetworkActivityLumberjackLogger
+@implementation AFNetworkLumberjackLogger
 
 
 + (instancetype)sharedLogger {
-    static AFNetworkActivityLumberjackLogger *_sharedLogger = nil;
+    static AFNetworkLumberjackLogger *_sharedLogger = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
