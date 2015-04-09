@@ -25,19 +25,13 @@
 #import "AFURLSessionManager.h"
 
 #import <objc/runtime.h>
-#import "DDLog.h"
-
-#ifdef RELEASE
-static int ddLogLevel = LOG_LEVEL_OFF;
-#else
-static int ddLogLevel = LOG_FLAG_DEBUG;
-#endif
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 
 static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
     NSURLRequest *request = nil;
-    if ([[notification object] isKindOfClass:[AFURLConnectionOperation class]]) {
-        request = [(AFURLConnectionOperation *)[notification object] request];
+    if ([[notification object] respondsToSelector:@selector(request)]) {
+        request = [[notification object] request];
     } else if ([[notification object] respondsToSelector:@selector(originalRequest)]) {
         request = [[notification object] originalRequest];
     }

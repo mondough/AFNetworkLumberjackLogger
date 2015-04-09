@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AFNetworkLumberjackLogger'
-  s.version  = '2.0.4'
+  s.version  = '3.0.0'
   s.license  = 'MIT'
   s.summary  = 'AFNetworking 2.0 Extension for Network Request Logging with Cocoa Lumberjack'
   s.homepage = 'https://github.com/RomainBoulay/AFNetworkLumberjackLogger'
