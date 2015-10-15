@@ -28,6 +28,13 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 
+#ifdef MONDO_LIVE
+const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#else
+const DDLogLevel ddLogLevel = DDLogLevelDebug;
+#endif
+
+
 static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
     NSURLRequest *request = nil;
     if ([[notification object] respondsToSelector:@selector(request)]) {
