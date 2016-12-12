@@ -30,6 +30,8 @@
 
 const DDLogLevel ddLogLevel = DDLogLevelDebug;
 
+#define LOG_LEVEL_DEF ddLogLevel
+#define LOG_ASYNC_ENABLED YES
 
 static NSURLRequest * AFNetworkRequestFromNotification(NSNotification *notification) {
     NSURLRequest *request = nil;
